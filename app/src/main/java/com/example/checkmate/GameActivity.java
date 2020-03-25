@@ -1,7 +1,9 @@
 package com.example.checkmate;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +25,8 @@ import android.view.ViewGroup;
 
 import com.example.checkmate.pieces.Pawn;
 import com.example.checkmate.pieces.Piece;
+import com.podcopic.animationlib.library.AnimationType;
+import com.podcopic.animationlib.library.StartSmartAnimation;
 
 import java.util.ArrayList;
 
@@ -47,6 +51,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     int i, j, resId , x , y;
     Piece piece = null, piece2 = null;
     String sb = "";
+    int whiteKX = 7, whiteKY = 4, blackKX = 0, blackKY = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +182,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         isGameOver = false;
         piece = null;
         piece2 = null;
+        whiteThreat = false;
+        blackThreat = false;
+        whiteKX = 7;
+        whiteKY = 4;
+        blackKX = 0;
+        blackKY = 4;
     }
 
     public void setWhiteReplace(boolean ok){ // Sets the pawn-promotion white board clickable
@@ -200,67 +211,46 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public boolean whiteKingThreat(boolean ok){ // Checks if the white king is threatened
-        int kingX = 7, kingY = 4;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if((arr[i][j] != null) && gM.isOcc(i,j)) {
                     if (gM.getPiece(i, j).color == 'b') {
-                        gM.showBlackPiecesMoves(i, j, ok);
+                        gM.showBlackPiecesMoves(i, j, ok, false);
                     }
                     if(gM.getString(i,j).equals("wk")) {
-                        kingX = i;
-                        kingY = j;
+                        whiteKX = i;
+                        whiteKY = j;
                     }
                 }
             }
         }
-        return gM.isYellow(kingX, kingY);
+        return gM.isYellow(whiteKX, whiteKY);
     }
 
     public boolean blackKingThreat(boolean ok){ // Checks if the black king is threatened
-        int kingX = 0, kingY = 4;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if(arr[i][j] != null && gM.isOK(i,j) && gM.isOcc(i,j)) {
                     if (gM.getPiece(i, j).color == 'w') {
-                        gM.showWhitePiecesMoves(i, j, ok);
+                        gM.showWhitePiecesMoves(i, j, ok, false);
                     }
                     if(gM.getString(i,j).equals("bk")) {
-                        kingX = i;
-                        kingY = j;
+                        blackKX = i;
+                        blackKY = j;
                     }
                 }
             }
         }
-        return gM.isYellow(kingX, kingY);
+        return gM.isYellow(blackKX, blackKY);
     }
 
     public void checkKing(){ // Checks if a king is threatened
-        if(whiteKingThreat(true)){
-            whiteThreat = true;
-//            Toast.makeText(this, "white king is in danger", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            whiteThreat = false;
-        }
+        whiteThreat = whiteKingThreat(true);
         gM.hideAllYellows();
-        if(blackKingThreat(true)){
-            blackThreat = true;
-//            Toast.makeText(this, "black king is in danger", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            blackThreat = false;
-        }
+
+        blackThreat = blackKingThreat(true);
         gM.hideAllYellows();
     }
-
-//    public void movestuff(){
-//        gM.updateSquare(i, j, true, piece2, false);
-//        gM.updateSquare(x, y, false, null, false);
-//        checkKing();
-//        if(whiteThreat || blackThreat)
-//            gM.setYellow(i, j,false);
-//    }
 
     public void moveToYellow(int x, int y, Piece piece){ // Moves a piece to chosen place on the board
         boolean occ = false;
@@ -282,14 +272,71 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 isWhiteTurn = !isWhiteTurn;
                 piece2.setMoved(true);
+
+                if(gM.getPiece(i,j).isDead()){
+                    gM.doCastling(gM.getPiece(i,j).color);
+                }
+
+                savePiece(i, j);
+                gM.hideAllYellows();
+                setSquaresImage();
+                pawnAtEnd();
+
+                if(gM.victoryCheck('w') != ' '){
+                    AlertDialog alertDialog = new AlertDialog.Builder(this)
+                            .setTitle("Black Wins!")
+                            .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent;
+                                    MainActivity.music.pause();
+                                    intent = new Intent(GameActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    restartGame();
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#00FFFF"));
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#00FFFF"));
+//                    StartSmartAnimation.startAnimation( findViewById() , AnimationType.ShakeBand , 2000 , 0 , true );
+                }
+                else {
+                    if (gM.victoryCheck('b') != ' ') {
+                        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                                .setTitle("White Wins!")
+                                .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent;
+                                        MainActivity.music.pause();
+                                        intent = new Intent(GameActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }
+
+                                })
+                                .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        restartGame();
+                                    }
+                                })
+                                .setCancelable(false)
+                                .show();
+                        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#0000FF"));
+                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#0000FF"));
+                    }
+                }
             }
 
-            savePiece(i, j);
-            gM.hideAllYellows();
-            setSquaresImage();
-            pawnAtEnd();
-            gM.victoryCheck('w');
-            gM.victoryCheck('b');
+
     }
 
     public void finishGame(){ // Stops the game
@@ -442,7 +489,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if(i == 3)
                     sb = "b";
                 gM.setPiece(x, y, gM.promotePawn(x, gM.getPiece(x,y).getColor(), sb));
-                checkKing();
+//                checkKing();
+                gM.victoryCheck('w');
             }
             if(v.getId() == bPieceR[i].getId()){
                 if(i == 0)
@@ -454,7 +502,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if(i == 3)
                     sb = "b";
                 gM.setPiece(x, y, gM.promotePawn(x, gM.getPiece(x,y).getColor(), sb));
-                checkKing();
+//                checkKing();
+                gM.victoryCheck('b');
             }
         }
         setBoardClickable(true);

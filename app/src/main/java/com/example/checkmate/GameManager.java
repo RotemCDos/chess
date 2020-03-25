@@ -89,8 +89,8 @@ public class GameManager {
         return this.board[i][j].getY();
     }
 
-    public String getString(int i, int j){
-        return getPiece(i,j).toString();
+    public String getString(int i, int j) {
+        return getPiece(i, j).toString();
     }
 
     public boolean isWhiteKing(int i, int j) {
@@ -133,38 +133,55 @@ public class GameManager {
 
     public void canEat(int i, int j, int x, int y, boolean ok) {
         if (isOK(x, y) && isOK(x, y)) {
-            if (this.board[x][y] != null && this.board[x][y].isOcc() && this.board[i][j] != null && this.board[i][j].isOcc()) {
-                if (this.board[i][j].getPiece().color != board[x][y].getPiece().color) {
+            if ((this.board[x][y] != null) && (this.board[x][y].isOcc()) && (this.board[i][j] != null) && (this.board[i][j].isOcc())) {
+                if ((this.board[i][j].getPiece().color != this.board[x][y].getPiece().color) && this.board[x][y].getPiece().color != ' ') {
                     setYellow(x, y, ok);
                 }
             }
         }
     }
 
-    public void showWhitePiecesMoves(int i, int j, boolean ok){ // Used to show all the possible moves of a certain color
+    public void showWhitePiecesMoves(int i, int j, boolean ok, boolean checkBlock) { // Used to show all the possible moves of a certain color
+        if(!checkBlock) {
             if (getString(i, j).equals("wp")) {
                 pawnAttacks(i, j, ok);
-            }
-            if (getString(i, j).equals("wr")) {
-                showRookMoves(i, j, ok);
-            }
-            if (getString(i, j).equals("wb")) {
-                showBishopMoves(i, j, ok);
-            }
-            if (getString(i, j).equals("wn")) {
-                showKnightMoves(i, j, ok);
-            }
-            if (getString(i, j).equals("wq")) {
-                showQueenMoves(i, j, ok);
             }
             if (getString(i, j).equals("wk")) {
                 showKingMoves(i, j, ok);
             }
+        }
+        else{
+            if (getString(i, j).equals("wp")) {
+                showPawnMoves(i, j, ok);
+            }
+        }
+        if (getString(i, j).equals("wr")) {
+            showRookMoves(i, j, ok);
+        }
+        if (getString(i, j).equals("wb")) {
+            showBishopMoves(i, j, ok);
+        }
+        if (getString(i, j).equals("wn")) {
+            showKnightMoves(i, j, ok);
+        }
+        if (getString(i, j).equals("wq")) {
+            showQueenMoves(i, j, ok);
+        }
     }
 
-    public void showBlackPiecesMoves(int i, int j, boolean ok){ // Used to show all the possible moves of a certain color
-        if (getString(i, j).equals("bp")) {
-            pawnAttacks(i, j, ok);
+    public void showBlackPiecesMoves(int i, int j, boolean ok, boolean checkBlock) { // Used to show all the possible moves of a certain color
+        if(!checkBlock) {
+            if (getString(i, j).equals("bp")) {
+                pawnAttacks(i, j, ok);
+            }
+            if (getString(i, j).equals("bk")) {
+                showKingMoves(i, j, ok);
+            }
+        }
+        else{
+            if (getString(i, j).equals("bp")) {
+                showPawnMoves(i, j, ok);
+            }
         }
         if (getString(i, j).equals("br")) {
             showRookMoves(i, j, ok);
@@ -177,9 +194,6 @@ public class GameManager {
         }
         if (getString(i, j).equals("bq")) {
             showQueenMoves(i, j, ok);
-        }
-        if (getString(i, j).equals("bk")) {
-            showKingMoves(i, j, ok);
         }
     }
 
@@ -269,35 +283,50 @@ public class GameManager {
         if (isOK(i - 1, j)) {
             int x = i;
             while (isOK(x - 2, j) && !this.board[x - 1][j].isOcc()) { //up
-                board[x - 1][j].setYellow(ok);
+                this.board[x - 1][j].setYellow(ok);
                 x--;
             }
             if (!this.board[x - 1][j].isOcc()) {
-                board[x - 1][j].setYellow(ok);
+                this.board[x - 1][j].setYellow(ok);
             }
             canEat(i, j, x - 1, j, ok);
+            if (isOK(x - 2, j) && !this.board[x - 2][j].isOcc()) {
+                if ((this.board[x - 1][j].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x - 1][j].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x - 2][j].setYellow(ok);
+                }
+            }
         }
         if (isOK(i, j + 1)) {
             int y = j;
             while (isOK(i, y + 2) && !this.board[i][y + 1].isOcc()) { //right
-                board[i][y + 1].setYellow(ok);
+                this.board[i][y + 1].setYellow(ok);
                 y++;
             }
             if (!this.board[i][y + 1].isOcc()) {
-                board[i][y + 1].setYellow(ok);
+                this.board[i][y + 1].setYellow(ok);
             }
             canEat(i, j, i, y + 1, ok);
+            if (isOK(i, y + 2) && !this.board[i][y + 2].isOcc()) {
+                if ((this.board[i][y + 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[i][y + 1].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[i][y + 2].setYellow(ok);
+                }
+            }
         }
         if (isOK(i + 1, j)) {
             int x = i;
             while (isOK(x + 2, j) && !this.board[x + 1][j].isOcc()) { //down
-                board[x + 1][j].setYellow(ok);
+                this.board[x + 1][j].setYellow(ok);
                 x++;
             }
             if (!this.board[x + 1][j].isOcc()) {
-                board[x + 1][j].setYellow(ok);
+                this.board[x + 1][j].setYellow(ok);
             }
             canEat(i, j, x + 1, j, ok);
+            if (isOK(x + 2, j) && !this.board[x + 2][j].isOcc()) {
+                if ((this.board[x + 1][j].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x + 1][j].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x + 2][j].setYellow(ok);
+                }
+            }
         }
 
         if (isOK(i, j - 1)) {
@@ -310,6 +339,11 @@ public class GameManager {
                 board[i][y - 1].setYellow(ok);
             }
             canEat(i, j, i, y - 1, ok);
+            if (isOK(i, y - 2) && !this.board[i][y - 2].isOcc()) {
+                if ((this.board[i][y - 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[i][y - 1].getPiece().toString().equals("bk")&& this.board[i][j].getPiece().color == 'w')) {
+                    board[i][y - 2].setYellow(ok);
+                }
+            }
         }
     }
 
@@ -389,6 +423,11 @@ public class GameManager {
                 board[x - 1][y + 1].setYellow(ok);
             }
             canEat(i, j, x - 1, y + 1, ok);
+            if (isOK(x - 2, y + 2) && !this.board[x - 2][y + 2].isOcc()) {
+                if ((this.board[x - 1][y + 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x - 1][y + 1].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x - 2][y + 2].setYellow(ok);
+                }
+            }
         }
         if (isOK(i + 1, j + 1)) {
             int x = i, y = j;
@@ -401,6 +440,11 @@ public class GameManager {
                 board[x + 1][y + 1].setYellow(ok);
             }
             canEat(i, j, x + 1, y + 1, ok);
+            if (isOK(x + 2, y + 2) && !this.board[x + 2][y + 2].isOcc()) {
+                if ((this.board[x + 1][y + 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x + 1][y + 1].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x + 2][y + 2].setYellow(ok);
+                }
+            }
         }
         if (isOK(i + 1, j - 1)) {
             int x = i, y = j;
@@ -413,6 +457,11 @@ public class GameManager {
                 board[x + 1][y - 1].setYellow(ok);
             }
             canEat(i, j, x + 1, y - 1, ok);
+            if (isOK(x + 2, y - 2) && !this.board[x + 2][y - 2].isOcc()) {
+                if ((this.board[x + 1][y - 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x + 1][y - 1].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x + 2][y - 2].setYellow(ok);
+                }
+            }
         }
 
         if (isOK(i - 1, j - 1)) {
@@ -426,6 +475,11 @@ public class GameManager {
                 board[x - 1][y - 1].setYellow(ok);
             }
             canEat(i, j, x - 1, y - 1, ok);
+            if (isOK(x - 2, y - 2) && !this.board[x - 2][y - 2].isOcc()) {
+                if ((this.board[x - 1][y - 1].getPiece().toString().equals("wk") && this.board[i][j].getPiece().color == 'b') || (this.board[x - 1][y - 1].getPiece().toString().equals("bk") && this.board[i][j].getPiece().color == 'w')) {
+                    board[x - 2][y - 2].setYellow(ok);
+                }
+            }
         }
     }
 
@@ -439,13 +493,14 @@ public class GameManager {
     ///////////////////////////////////////////////////////////King Moves
 
     public void showKingMoves(int i, int j, boolean ok) {
+        castlingMarkings(this.board[i][j].getPiece().color);
         int y = j - 1;
         while (y < j + 2) {
-            if(isOK(i + 1, y)) {
+            if (isOK(i + 1, y)) {
                 if (!this.board[i + 1][y].isOcc()) {
                     board[i + 1][y].setYellow(ok);
                 }
-                if(this.board[i + 1][y].isOcc()) {
+                if (this.board[i + 1][y].isOcc()) {
                     if (this.board[i + 1][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i + 1][y].getPiece().color == 'w') {
                             this.board[i + 1][y].getPiece().setColor('b');
@@ -475,11 +530,11 @@ public class GameManager {
 
         y = j - 1;
         while (y < j + 2) {
-            if(isOK(i, y)) {
+            if (isOK(i, y)) {
                 if (!this.board[i][y].isOcc() && y != j) {
                     board[i][y].setYellow(ok);
                 }
-                if(this.board[i][y].isOcc()) {
+                if (this.board[i][y].isOcc()) {
                     if (this.board[i][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i][y].getPiece().color == 'w') {
                             this.board[i][y].getPiece().setColor('b');
@@ -509,11 +564,11 @@ public class GameManager {
 
         y = j - 1;
         while (y < j + 2) {
-            if(isOK(i - 1, y)) {
+            if (isOK(i - 1, y)) {
                 if (!this.board[i - 1][y].isOcc()) {
                     board[i - 1][y].setYellow(ok);
                 }
-                if(this.board[i - 1][y].isOcc()) {
+                if (this.board[i - 1][y].isOcc()) {
                     if (this.board[i - 1][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i - 1][y].getPiece().color == 'w') {
                             this.board[i - 1][y].getPiece().setColor('b');
@@ -542,20 +597,199 @@ public class GameManager {
         }
     }
 
+//    public boolean canBlockThreat(Piece piece){
+//        boolean ok = false;
+//        if (piece.color == 'w'){
+//            if(piece.toString() == "wr"){
+//                showRookMoves(gA.x, gA.y, true);
+//                ok = this.board[gA.blackKX][gA.blackKY].isYellow();
+//            }
+//            else{
+//                if(piece.toString() == "wb"){
+//                    showBishopMoves(gA.x, gA.y, true);
+//                    ok = this.board[gA.blackKX][gA.blackKY].isYellow();
+//                }
+//                else{
+//                    if(piece.toString() == "wq"){
+//                        showQueenMoves(gA.x, gA.y, true);
+//                        ok = this.board[gA.blackKX][gA.blackKY].isYellow();
+//                    }
+//                }
+//            }
+//        }
+//        else{
+//            if(piece.toString() == "br"){
+//                showRookMoves(gA.x, gA.y, true);
+//                ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
+//            }
+//            else{
+//                if(piece.toString() == "bb"){
+//                    showBishopMoves(gA.x, gA.y, true);
+//                    ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
+//                }
+//                else{
+//                    if(piece.toString() == "bq"){
+//                        showQueenMoves(gA.x, gA.y, true);
+//                        ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
+//                    }
+//                }
+//            }
+//        }
+//        return ok;
+//    }
 
-    public void victoryCheck(char color){
-        if(color == 'w') {
-            if (!gA.yellowExist && gA.whiteThreat) {
-                gA.finishGame();
-                Toast.makeText(gA, "Black Wins!", Toast.LENGTH_SHORT).show();
+    public boolean canBlockThreat(Piece piece){
+        boolean ok = false;
+        if(piece.toString().matches("wr|wb|wq|bb|br|bq")) {
+            if (piece.color == 'w') {
+                for (int o = 0; o < 2; o++) {
+                    for (int p = 0; p < 8; p++) {
+                        for (int k = 0; k < 8; k++) {
+                            if (o == 0) {
+                                if (this.board[p][k] != null && this.board[p][k].isOcc()) {
+                                    showBlackPiecesMoves(p, k, true, true);
+                                }
+                            } else {
+                                if (this.board[p][k].isYellow()) {
+                                    this.board[p][k].setOcc(true);
+                                    this.board[p][k].setYellow(false);
+                                    this.board[p][k].setPiece(new EmptyPiece());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (piece.toString() == "wb") {
+                    showBishopMoves(gA.x, gA.y, true);
+                    ok = !this.board[gA.blackKX][gA.blackKY].isYellow();
+                } else {
+                    if (piece.toString() == "wr") {
+                        showRookMoves(gA.x, gA.y, true);
+                        ok = !this.board[gA.blackKX][gA.blackKY].isYellow();
+                    } else {
+                        showQueenMoves(gA.x, gA.y, true);
+                        ok = !this.board[gA.blackKX][gA.blackKY].isYellow();
+                    }
+                }
+            }
+            else{
+                for (int o = 0; o < 2; o++) {
+                    for (int p = 0; p < 8; p++) {
+                        for (int k = 0; k < 8; k++) {
+                            if (o == 0) {
+                                if (this.board[p][k] != null && this.board[p][k].isOcc()) {
+                                    showWhitePiecesMoves(p, k, true, true);
+                                }
+                            } else {
+                                if (this.board[p][k].isYellow() && !this.board[p][k].isOcc()) {
+                                    this.board[p][k].setOcc(true);
+                                    this.board[p][k].setYellow(false);
+                                    this.board[p][k].setPiece(new EmptyPiece());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (piece.toString() == "bb") {
+                    showBishopMoves(gA.x, gA.y, true);
+                    ok = !this.board[gA.whiteKX][gA.whiteKY].isYellow();
+                } else {
+                    if (piece.toString() == "br") {
+                        showRookMoves(gA.x, gA.y, true);
+                        ok = !this.board[gA.whiteKX][gA.whiteKY].isYellow();
+                    } else {
+                        showQueenMoves(gA.x, gA.y, true);
+                        ok = !this.board[gA.whiteKX][gA.whiteKY].isYellow();
+                    }
+                }
             }
         }
-        else{
-            if (!gA.yellowExist && gA.blackThreat){
-                gA.finishGame();
-                Toast.makeText(gA, "White Wins!", Toast.LENGTH_SHORT).show();
+        for (int p = 0; p < 8; p++) {
+            for (int k = 0; k < 8; k++) {
+                if (this.board[p][k].isOcc() && this.board[p][k].getPiece().toString().equals("EmptyPiece")){
+                    this.board[p][k].setOcc(false);
+                    this.board[p][k].setPiece(null);
+                }
             }
         }
+        return ok;
+    }
+
+    public boolean canRemoveThreat(char color) {
+        boolean ok = false;
+        int threat = 0;
+        if (color == 'w') {
+            for (int p = 0; p < 8; p++)
+                for (int k = 0; k < 8; k++) {
+                    if (this.board[p][k] != null && this.board[p][k].isOcc()) {
+                        showBlackPiecesMoves(p, k, true, false);
+                        if (this.board[gA.whiteKX][gA.whiteKY].isYellow()) {
+                            threat++;
+                            gA.savePiece(p, k);
+                        }
+                        hideAllYellows();
+                    }
+                }
+            if (threat < 2) {
+                gA.blackKingThreat(true);
+                if (this.board[gA.x][gA.y].isYellow()) {
+                    ok = true;
+                }
+                else{
+                    hideAllYellows();
+                    ok = canBlockThreat(gA.piece);
+                }
+                hideAllYellows();
+            }
+        } else {
+            for (int p = 0; p < 8; p++)
+                for (int k = 0; k < 8; k++) {
+                    if (this.board[p][k] != null && this.board[p][k].isOcc()) {
+                        showWhitePiecesMoves(p, k, true, false);
+                        if (this.board[gA.blackKX][gA.blackKY].isYellow()) {
+                            threat++;
+                            gA.savePiece(p, k);
+                        }
+                        hideAllYellows();
+                    }
+                }
+            if (threat < 2) {
+                gA.whiteKingThreat(true);
+                if (this.board[gA.x][gA.y].isYellow()) {
+                    ok = true;
+                }
+                else{
+                    hideAllYellows();
+                    ok = canBlockThreat(gA.piece);
+                }
+                hideAllYellows();
+            }
+        }
+        return ok;
+    }
+
+
+    public char victoryCheck(char color) {
+        char c = ' ';
+        if (color == 'w') {
+            gA.whiteKingThreat(true);
+            showKingMoves(gA.whiteKX, gA.whiteKY, true);
+            gA.whiteKingThreat(false);
+            if (!gA.yellowExist && gA.whiteThreat && !canRemoveThreat(color)) {
+                gA.finishGame();
+                c = 'b';
+            }
+        } else {
+            gA.blackKingThreat(true);
+            showKingMoves(gA.blackKX, gA.blackKY, true);
+            gA.blackKingThreat(false);
+            if (!gA.yellowExist && gA.blackThreat && !canRemoveThreat(color)) {
+                gA.finishGame();
+                c = 'w';
+            }
+        }
+        hideAllYellows();
+        return c;
     }
 
     public Piece promotePawn(int i, char color, String pieceStr) { // Sets a pawn that reached the first / eighth rank to a different piece
@@ -569,32 +803,93 @@ public class GameManager {
             if (pieceStr.equals("b")) {
                 return new Bishop(color, false, true);
             }
-            if(pieceStr.equals("q")) {
+            if (pieceStr.equals("q")) {
                 return new Queen(color, false, true);
             }
             gA.setBoardClickable(false);
-        }
-        else {
+        } else {
             gA.setBoardClickable(true);
         }
         return new Pawn(color, false, true);
     }
 
-//    public void castling(){
-//            if (!this.board[7][0].getPiece().isMoved() && !this.board[7][4].getPiece().isMoved()) {
-//                if (!this.board[7][1].isOcc() && !this.board[7][2].isOcc() && !this.board[7][3].isOcc()) {
-//                    this.board[7][2].setYellow(true);
-//                    gA.setPurple(7,2);
-//                }
-//            }
-//    }
+    public void castlingMarkings(char color) {
+        if(color == 'w') {
+            if(this.board[7][0].isOcc() && this.board[7][4].isOcc()) {
+                if (!this.board[7][0].getPiece().isMoved() && !this.board[7][4].getPiece().isMoved()) {
+                    if (!this.board[7][1].isOcc() && !this.board[7][2].isOcc() && !this.board[7][3].isOcc()) {
+                        this.board[7][2].setYellow(true);
+                        this.board[7][0].getPiece().setDead(true);
+                        this.board[7][4].getPiece().setDead(true);
+                    }
+                }
+            }
+            if(this.board[7][7].isOcc() && this.board[7][4].isOcc()) {
+                if (!this.board[7][7].getPiece().isMoved() && !this.board[7][4].getPiece().isMoved()) {
+                    if (!this.board[7][5].isOcc() && !this.board[7][6].isOcc()) {
+                        this.board[7][6].setYellow(true);
+                        this.board[7][7].getPiece().setDead(true);
+                        this.board[7][4].getPiece().setDead(true);
+                    }
+                }
+            }
+        }
+        else{
+            if(this.board[0][0].isOcc() && this.board[0][4].isOcc()) {
+                if (!this.board[0][0].getPiece().isMoved() && !this.board[0][4].getPiece().isMoved()) {
+                    if (!this.board[0][1].isOcc() && !this.board[0][2].isOcc() && !this.board[0][3].isOcc()) {
+                        this.board[0][2].setYellow(true);
+                        this.board[0][0].getPiece().setDead(true);
+                        this.board[0][4].getPiece().setDead(true);
+                    }
+                }
+            }
+            if(this.board[0][7].isOcc() && this.board[0][4].isOcc()) {
+                if (!this.board[0][7].getPiece().isMoved() && !this.board[0][4].getPiece().isMoved()) {
+                    if (!this.board[0][5].isOcc() && !this.board[0][6].isOcc()) {
+                        this.board[0][6].setYellow(true);
+                        this.board[0][7].getPiece().setDead(true);
+                        this.board[0][4].getPiece().setDead(true);
+                    }
+                }
+            }
+        }
+    }
+
+    public void doCastling(char color){
+        if(color == 'w'){
+            if (this.board[7][0].getPiece().isDead()){
+                updateSquare(7, 3, true, this.board[7][0].getPiece() , false);
+                updateSquare(7, 0, false, null, false);
+                this.board[7][3].getPiece().setMoved(true);
+                this.board[7][3].getPiece().setDead(false);
+                this.board[7][2].getPiece().setDead(false);
+            }
+            else
+                if (this.board[7][7].getPiece().isDead()){
+                updateSquare(7, 5, true, this.board[7][7].getPiece() , false);
+                updateSquare(7, 7, false, null, false);
+                this.board[7][5].getPiece().setMoved(true);
+                this.board[7][5].getPiece().setDead(false);
+                this.board[7][6].getPiece().setDead(false);
+            }
+        }
+        else{
+            if (this.board[0][0].getPiece().isDead()){
+                updateSquare(0, 3, true, this.board[0][0].getPiece() , false);
+                updateSquare(0, 0, false, null, false);
+                this.board[0][3].getPiece().setMoved(true);
+                this.board[0][3].getPiece().setDead(false);
+                this.board[0][2].getPiece().setDead(false);
+            }
+            else
+            if (this.board[0][7].getPiece().isDead()){
+                updateSquare(0, 5, true, this.board[0][7].getPiece() , false);
+                updateSquare(0, 7, false, null, false);
+                this.board[0][5].getPiece().setMoved(true);
+                this.board[0][5].getPiece().setDead(false);
+                this.board[0][6].getPiece().setDead(false);
+            }
+        }
+    }
 }
-
-
-
-/*
-    TO DO LIST:
-
-    Castling
-    King Threat (Mat)
- */

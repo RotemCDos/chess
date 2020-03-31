@@ -282,68 +282,68 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 setSquaresImage();
                 pawnAtEnd();
 
-                if(gM.victoryCheck('w') != ' '){
-                    AlertDialog alertDialog = new AlertDialog.Builder(this)
-                            .setTitle("Black Wins!")
-                            .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent;
-                                    MainActivity.music.pause();
-                                    intent = new Intent(GameActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    restartGame();
-                                }
-                            })
-                            .setCancelable(false)
-                            .show();
-                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#00FFFF"));
-                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#00FFFF"));
-//                    StartSmartAnimation.startAnimation( findViewById() , AnimationType.ShakeBand , 2000 , 0 , true );
-                }
-                else {
-                    if (gM.victoryCheck('b') != ' ') {
-                        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                                .setTitle("White Wins!")
-                                .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent;
-                                        MainActivity.music.pause();
-                                        intent = new Intent(GameActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    }
-
-                                })
-                                .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        restartGame();
-                                    }
-                                })
-                                .setCancelable(false)
-                                .show();
-                        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#0000FF"));
-                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#0000FF"));
-                    }
-                }
+                gM.victoryCheck('w');
+                gM.victoryCheck('b');
             }
-
-
     }
 
-    public void finishGame(){ // Stops the game
+    public void finishGame(char c){ // Stops the game
         setBoardClickable(false);
         setWhiteReplace(false);
         setBlackReplace(false);
         isGameOver = true;
+
+        if(c == 'b'){
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("Black Wins!")
+                    .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent;
+                            MainActivity.music.pause();
+                            intent = new Intent(GameActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            restartGame();
+                        }
+                    })
+//                            .setCancelable(false)
+                    .show();
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#00FFFF"));
+            alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#00FFFF"));
+        }
+        else {
+            if (c == 'w') {
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setTitle("White Wins!")
+                        .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent;
+                                MainActivity.music.pause();
+                                intent = new Intent(GameActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+
+                        })
+                        .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                restartGame();
+                            }
+                        })
+//                                .setCancelable(false)
+                        .show();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#0000FF"));
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#0000FF"));
+            }
+        }
     }
 
     public void setYellowSquares() { // Sets the square which a piece can move to to a yellow square
@@ -564,7 +564,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Intent intent;
-        Log.d("id", v.getId() + "");
         switch (v.getId()) {
             case R.id.btnBackg:
                 MainActivity.music.pause();

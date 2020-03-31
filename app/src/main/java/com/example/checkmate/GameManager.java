@@ -146,9 +146,9 @@ public class GameManager {
             if (getString(i, j).equals("wp")) {
                 pawnAttacks(i, j, ok);
             }
-            if (getString(i, j).equals("wk")) {
-                showKingMoves(i, j, ok);
-            }
+//            if (getString(i, j).equals("wk")) {
+//                showKingMoves(i, j, ok);
+//            }
         }
         else{
             if (getString(i, j).equals("wp")) {
@@ -174,9 +174,9 @@ public class GameManager {
             if (getString(i, j).equals("bp")) {
                 pawnAttacks(i, j, ok);
             }
-            if (getString(i, j).equals("bk")) {
-                showKingMoves(i, j, ok);
-            }
+//            if (getString(i, j).equals("bk")) {
+//                showKingMoves(i, j, ok);
+//            }
         }
         else{
             if (getString(i, j).equals("bp")) {
@@ -490,6 +490,33 @@ public class GameManager {
         showRookMoves(i, j, ok);
     }
 
+    //////////////////////////////////////////////////////////Checking if a square is "touching" two kings
+
+    public boolean checkFor2Kings(int i, int j){
+        int check = 0;
+        for(int y = j - 1; y < j + 2; y++){
+            if (isOK(i + 1, y) && isOcc(i + 1, y)) {
+                if(getString(i + 1, y).equals("wk") || getString(i + 1, y).equals("bk")){
+                    check++;
+                }
+            }
+        }
+        for(int y = j - 1; y < j + 2; y++){
+            if (isOK(i, y) && isOcc(i, y) && y != j) {
+                if(getString(i, y).equals("wk") || getString(i, y).equals("bk")){
+                    check++;
+                }
+            }
+        }
+        for(int y = j - 1; y < j + 2; y++){
+            if (isOK(i - 1, y) && isOcc(i - 1, y)) {
+                if(getString(i - 1, y).equals("wk") || getString(i - 1, y).equals("bk")){
+                    check++;
+                }
+            }
+        }
+        return (check < 2);
+    }
     ///////////////////////////////////////////////////////////King Moves
 
     public void showKingMoves(int i, int j, boolean ok) {
@@ -497,10 +524,10 @@ public class GameManager {
         int y = j - 1;
         while (y < j + 2) {
             if (isOK(i + 1, y)) {
-                if (!this.board[i + 1][y].isOcc()) {
+                if (!this.board[i + 1][y].isOcc() && checkFor2Kings(i + 1, y)) {
                     board[i + 1][y].setYellow(ok);
                 }
-                if (this.board[i + 1][y].isOcc()) {
+                if (this.board[i + 1][y].isOcc() && checkFor2Kings(i + 1, y)) {
                     if (this.board[i + 1][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i + 1][y].getPiece().color == 'w') {
                             this.board[i + 1][y].getPiece().setColor('b');
@@ -521,7 +548,6 @@ public class GameManager {
                             gA.whiteKingThreat(false);
                             this.board[i + 1][y].getPiece().setColor('b');
                         }
-
                     }
                 }
             }
@@ -531,10 +557,10 @@ public class GameManager {
         y = j - 1;
         while (y < j + 2) {
             if (isOK(i, y)) {
-                if (!this.board[i][y].isOcc() && y != j) {
+                if (!this.board[i][y].isOcc() && y != j && checkFor2Kings(i, y)) {
                     board[i][y].setYellow(ok);
                 }
-                if (this.board[i][y].isOcc()) {
+                if (this.board[i][y].isOcc() && checkFor2Kings(i, y)) {
                     if (this.board[i][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i][y].getPiece().color == 'w') {
                             this.board[i][y].getPiece().setColor('b');
@@ -555,7 +581,6 @@ public class GameManager {
                             gA.whiteKingThreat(false);
                             this.board[i][y].getPiece().setColor('b');
                         }
-
                     }
                 }
             }
@@ -565,10 +590,10 @@ public class GameManager {
         y = j - 1;
         while (y < j + 2) {
             if (isOK(i - 1, y)) {
-                if (!this.board[i - 1][y].isOcc()) {
+                if (!this.board[i - 1][y].isOcc() && checkFor2Kings(i - 1, y)) {
                     board[i - 1][y].setYellow(ok);
                 }
-                if (this.board[i - 1][y].isOcc()) {
+                if (this.board[i - 1][y].isOcc() && checkFor2Kings(i - 1, y)) {
                     if (this.board[i - 1][y].getPiece().color != this.board[i][j].getPiece().color) {
                         if (this.board[i - 1][y].getPiece().color == 'w') {
                             this.board[i - 1][y].getPiece().setColor('b');
@@ -589,54 +614,12 @@ public class GameManager {
                             gA.whiteKingThreat(false);
                             this.board[i - 1][y].getPiece().setColor('b');
                         }
-
                     }
                 }
             }
             y++;
         }
     }
-
-//    public boolean canBlockThreat(Piece piece){
-//        boolean ok = false;
-//        if (piece.color == 'w'){
-//            if(piece.toString() == "wr"){
-//                showRookMoves(gA.x, gA.y, true);
-//                ok = this.board[gA.blackKX][gA.blackKY].isYellow();
-//            }
-//            else{
-//                if(piece.toString() == "wb"){
-//                    showBishopMoves(gA.x, gA.y, true);
-//                    ok = this.board[gA.blackKX][gA.blackKY].isYellow();
-//                }
-//                else{
-//                    if(piece.toString() == "wq"){
-//                        showQueenMoves(gA.x, gA.y, true);
-//                        ok = this.board[gA.blackKX][gA.blackKY].isYellow();
-//                    }
-//                }
-//            }
-//        }
-//        else{
-//            if(piece.toString() == "br"){
-//                showRookMoves(gA.x, gA.y, true);
-//                ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
-//            }
-//            else{
-//                if(piece.toString() == "bb"){
-//                    showBishopMoves(gA.x, gA.y, true);
-//                    ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
-//                }
-//                else{
-//                    if(piece.toString() == "bq"){
-//                        showQueenMoves(gA.x, gA.y, true);
-//                        ok = this.board[gA.whiteKX][gA.whiteKY].isYellow();
-//                    }
-//                }
-//            }
-//        }
-//        return ok;
-//    }
 
     public boolean canBlockThreat(Piece piece){
         boolean ok = false;
@@ -769,27 +752,39 @@ public class GameManager {
     }
 
 
-    public char victoryCheck(char color) {
+    public boolean foundYellowSquares() { // Checks all the squares to find yellow squares
+        boolean yellowExist = false;
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
+                if (this.board[i][j] != null && isYellow(i, j)) {
+                    yellowExist = true;
+                }
+            }
+        hideAllYellows();
+        return yellowExist;
+    }
+
+    public void victoryCheck(char color) {
         char c = ' ';
         if (color == 'w') {
             gA.whiteKingThreat(true);
             showKingMoves(gA.whiteKX, gA.whiteKY, true);
             gA.whiteKingThreat(false);
-            if (!gA.yellowExist && gA.whiteThreat && !canRemoveThreat(color)) {
-                gA.finishGame();
+            if (!foundYellowSquares() && gA.whiteThreat && !canRemoveThreat(color)) {
                 c = 'b';
+                gA.finishGame(c);
             }
-        } else {
+        }
+        else {
             gA.blackKingThreat(true);
             showKingMoves(gA.blackKX, gA.blackKY, true);
             gA.blackKingThreat(false);
-            if (!gA.yellowExist && gA.blackThreat && !canRemoveThreat(color)) {
-                gA.finishGame();
+            if (!foundYellowSquares() && gA.blackThreat && !canRemoveThreat(color)) {
                 c = 'w';
+                gA.finishGame(c);
             }
         }
         hideAllYellows();
-        return c;
     }
 
     public Piece promotePawn(int i, char color, String pieceStr) { // Sets a pawn that reached the first / eighth rank to a different piece

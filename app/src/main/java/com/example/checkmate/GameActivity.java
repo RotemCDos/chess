@@ -311,7 +311,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             restartGame();
                         }
                     })
-//                            .setCancelable(false)
+                    .setCancelable(false)
                     .show();
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#00FFFF"));
@@ -337,7 +337,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 restartGame();
                             }
                         })
-//                                .setCancelable(false)
+                        .setCancelable(false)
                         .show();
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#0000FF"));

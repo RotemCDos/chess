@@ -809,22 +809,29 @@ public class GameManager {
     }
 
     public void castlingMarkings(char color) {
+        boolean ok;
         if(color == 'w') {
             if(this.board[7][0].isOcc() && this.board[7][4].isOcc()) {
                 if (!this.board[7][0].getPiece().isMoved() && !this.board[7][4].getPiece().isMoved()) {
                     if (!this.board[7][1].isOcc() && !this.board[7][2].isOcc() && !this.board[7][3].isOcc()) {
-                        this.board[7][2].setYellow(true);
-                        this.board[7][0].getPiece().setDead(true);
-                        this.board[7][4].getPiece().setDead(true);
+                        gA.whiteKingThreat(true);
+                        ok = !this.board[7][2].isYellow();
+                        this.board[7][2].setYellow(ok);
+                        this.board[7][0].getPiece().setDead(ok);
+                        this.board[7][4].getPiece().setDead(ok);
+                        gA.whiteKingThreat(false);
                     }
                 }
             }
             if(this.board[7][7].isOcc() && this.board[7][4].isOcc()) {
                 if (!this.board[7][7].getPiece().isMoved() && !this.board[7][4].getPiece().isMoved()) {
                     if (!this.board[7][5].isOcc() && !this.board[7][6].isOcc()) {
-                        this.board[7][6].setYellow(true);
-                        this.board[7][7].getPiece().setDead(true);
-                        this.board[7][4].getPiece().setDead(true);
+                        gA.whiteKingThreat(true);
+                        ok = !this.board[7][6].isYellow();
+                        this.board[7][6].setYellow(ok);
+                        this.board[7][7].getPiece().setDead(ok);
+                        this.board[7][4].getPiece().setDead(ok);
+                        gA.whiteKingThreat(false);
                     }
                 }
             }
@@ -833,18 +840,24 @@ public class GameManager {
             if(this.board[0][0].isOcc() && this.board[0][4].isOcc()) {
                 if (!this.board[0][0].getPiece().isMoved() && !this.board[0][4].getPiece().isMoved()) {
                     if (!this.board[0][1].isOcc() && !this.board[0][2].isOcc() && !this.board[0][3].isOcc()) {
-                        this.board[0][2].setYellow(true);
-                        this.board[0][0].getPiece().setDead(true);
-                        this.board[0][4].getPiece().setDead(true);
+                        gA.blackKingThreat(true);
+                        ok = !this.board[0][2].isYellow();
+                        this.board[0][2].setYellow(ok);
+                        this.board[0][0].getPiece().setDead(ok);
+                        this.board[0][4].getPiece().setDead(ok);
+                        gA.blackKingThreat(false);
                     }
                 }
             }
             if(this.board[0][7].isOcc() && this.board[0][4].isOcc()) {
                 if (!this.board[0][7].getPiece().isMoved() && !this.board[0][4].getPiece().isMoved()) {
                     if (!this.board[0][5].isOcc() && !this.board[0][6].isOcc()) {
-                        this.board[0][6].setYellow(true);
-                        this.board[0][7].getPiece().setDead(true);
-                        this.board[0][4].getPiece().setDead(true);
+                        gA.blackKingThreat(true);
+                        ok = !this.board[0][6].isYellow();
+                        this.board[0][6].setYellow(ok);
+                        this.board[0][7].getPiece().setDead(ok);
+                        this.board[0][4].getPiece().setDead(ok);
+                        gA.blackKingThreat(false);
                     }
                 }
             }
@@ -861,13 +874,13 @@ public class GameManager {
                 this.board[7][2].getPiece().setDead(false);
             }
             else
-                if (this.board[7][7].getPiece().isDead()){
-                updateSquare(7, 5, true, this.board[7][7].getPiece() , false);
-                updateSquare(7, 7, false, null, false);
-                this.board[7][5].getPiece().setMoved(true);
-                this.board[7][5].getPiece().setDead(false);
-                this.board[7][6].getPiece().setDead(false);
-            }
+                if (this.board[7][7].getPiece().isDead()) {
+                    updateSquare(7, 5, true, this.board[7][7].getPiece(), false);
+                    updateSquare(7, 7, false, null, false);
+                    this.board[7][5].getPiece().setMoved(true);
+                    this.board[7][5].getPiece().setDead(false);
+                    this.board[7][6].getPiece().setDead(false);
+                }
         }
         else{
             if (this.board[0][0].getPiece().isDead()){

@@ -777,14 +777,14 @@ public class GameManager {
                 c = 'b';
                 gA.finishGame(c);
             }
-            else{
-                if(ok && !gA.whiteThreat){
-                    if(stalemate('w')){
-//                        Toast.makeText(gA, "whitelelelelelelel", Toast.LENGTH_SHORT).show();
-                        gA.finishGame(c);
-                    }
-                }
-            }
+//            else{
+//                if(ok && !gA.whiteThreat){
+//                    if(stalemate('w')){
+////                        Toast.makeText(gA, "whitelelelelelelel", Toast.LENGTH_SHORT).show();
+//                        gA.finishGame(c);
+//                    }
+//                }
+//            }
         }
         else {
             gA.blackKingThreat(true);
@@ -795,14 +795,14 @@ public class GameManager {
                 c = 'w';
                 gA.finishGame(c);
             }
-            else{
-                if(ok && !gA.blackThreat){
-                    if(stalemate('b')){
+//            else{
+//                if(ok && !gA.blackThreat){
+//                    if(stalemate('b')){
 //                        Toast.makeText(gA, "blackkkkkkkkkk", Toast.LENGTH_SHORT).show();
-                        gA.finishGame(c);
-                    }
-                }
-            }
+//                        gA.finishGame(c);
+//                    }
+//                }
+//            }
         }
         hideAllYellows();
     }
@@ -944,42 +944,42 @@ public class GameManager {
         return points;
     }
 
-    public boolean stalemate(char color){
-        int check = 0;
-        if(color == 'w') {
-            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-                if (!isOK(gA.whiteKX + 1, y) || (isOK(gA.whiteKX + 1, y) && isOcc(gA.whiteKX + 1, y))) {
-                    check++;
-                }
-            }
-            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-                if (!isOK(gA.whiteKX, y) || (isOK(gA.whiteKX, y) && isOcc(gA.whiteKX, y)) && y != gA.whiteKY) {
-                    check++;
-                }
-            }
-            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-                if (!isOK(gA.whiteKX - 1, y) || (isOK(gA.whiteKX - 1, y) && isOcc(gA.whiteKX - 1, y))) {
-                    check++;
-                }
-            }
-        }
-        else {
-            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-                if (!isOK(gA.blackKX + 1, y) || (isOK(gA.blackKX + 1, y) && isOcc(gA.blackKX + 1, y))) {
-                    check++;
-                }
-            }
-            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-                if (!isOK(gA.blackKX, y) || (isOK(gA.blackKX, y) && isOcc(gA.blackKX, y)) && y != gA.blackKY) {
-                    check++;
-                }
-            }
-            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-                if (!isOK(gA.blackKX - 1, y) || (isOK(gA.blackKX - 1, y) && isOcc(gA.blackKX - 1, y))) {
-                    check++;
-                }
-            }
-        }
-        return check != 8;
-    }
+//    public boolean stalemate(char color){
+//        int check = 0;
+//        if(color == 'w') {
+////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+////                if (!isOK(gA.whiteKX + 1, y) || (isOK(gA.whiteKX + 1, y) && isOcc(gA.whiteKX + 1, y))) {
+////                    check++;
+////                }
+////            }
+////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+////                if (!isOK(gA.whiteKX, y) || (isOK(gA.whiteKX, y) && isOcc(gA.whiteKX, y)) && y != gA.whiteKY) {
+////                    check++;
+////                }
+////            }
+////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+////                if (!isOK(gA.whiteKX - 1, y) || (isOK(gA.whiteKX - 1, y) && isOcc(gA.whiteKX - 1, y))) {
+////                    check++;
+////                }
+////            }
+//        }
+//        else {
+////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+////                if (!isOK(gA.blackKX + 1, y) || (isOK(gA.blackKX + 1, y) && isOcc(gA.blackKX + 1, y))) {
+////                    check++;
+////                }
+////            }
+////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+////                if (!isOK(gA.blackKX, y) || (isOK(gA.blackKX, y) && isOcc(gA.blackKX, y)) && y != gA.blackKY) {
+////                    check++;
+////                }
+////            }
+////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+////                if (!isOK(gA.blackKX - 1, y) || (isOK(gA.blackKX - 1, y) && isOcc(gA.blackKX - 1, y))) {
+////                    check++;
+////                }
+////            }
+//        }
+//        return check != 8;
+//    }
 }

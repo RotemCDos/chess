@@ -56,6 +56,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     Piece piece = null, piece2 = null;
     String sb = "";
     int whiteKX = 7, whiteKY = 4, blackKX = 0, blackKY = 4;
+    int whitePoints = 0, blackPoints = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +193,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         whiteKY = 4;
         blackKX = 0;
         blackKY = 4;
+        whitePoints = 0;
+        blackPoints = 0;
     }
 
     public void setWhiteReplace(boolean ok){ // Sets the pawn-promotion white board clickable
@@ -281,6 +284,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
             else{
+                if(isWhiteTurn){
+                    whitePoints += gM.pointCalculation(piece);
+                }
+                else{
+                    blackPoints += gM.pointCalculation(piece);
+                }
                 isWhiteTurn = !isWhiteTurn;
                 piece2.setMoved(true);
 
@@ -305,6 +314,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         isGameOver = true;
 
         if(c == 'b'){
+            blackPoints += 200;
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("Black Wins!")
                     .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
@@ -330,6 +340,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             if (c == 'w') {
+                whitePoints += 200;
                 AlertDialog alertDialog = new AlertDialog.Builder(this)
                         .setTitle("White Wins!")
                         .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
@@ -354,7 +365,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#0000FF"));
                 alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#0000FF"));
             }
+            else{
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setTitle("Draw!")
+                        .setNeutralButton("Main Menu", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent;
+                                MainActivity.music.pause();
+                                intent = new Intent(GameActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+
+                        })
+                        .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                restartGame();
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3090C7"));
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#3090C7"));
+            }
         }
+        Toast.makeText(this, "White points: " + whitePoints, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Black points: " + blackPoints, Toast.LENGTH_SHORT).show();
     }
 
     public void setYellowSquares() { // Sets the square which a piece can move to to a yellow square

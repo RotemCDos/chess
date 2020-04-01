@@ -754,34 +754,54 @@ public class GameManager {
 
     public boolean foundYellowSquares() { // Checks all the squares to find yellow squares
         boolean yellowExist = false;
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (this.board[i][j] != null && isYellow(i, j)) {
+                if (isYellow(i, j)) {
                     yellowExist = true;
                 }
             }
+        }
         hideAllYellows();
         return yellowExist;
     }
 
     public void victoryCheck(char color) {
         char c = ' ';
+        boolean ok;
         if (color == 'w') {
             gA.whiteKingThreat(true);
             showKingMoves(gA.whiteKX, gA.whiteKY, true);
             gA.whiteKingThreat(false);
-            if (!foundYellowSquares() && gA.whiteThreat && !canRemoveThreat(color)) {
+            ok = !foundYellowSquares();
+            if (ok && gA.whiteThreat && !canRemoveThreat(color)) {
                 c = 'b';
                 gA.finishGame(c);
+            }
+            else{
+                if(ok && !gA.whiteThreat){
+                    if(stalemate('w')){
+//                        Toast.makeText(gA, "whitelelelelelelel", Toast.LENGTH_SHORT).show();
+                        gA.finishGame(c);
+                    }
+                }
             }
         }
         else {
             gA.blackKingThreat(true);
             showKingMoves(gA.blackKX, gA.blackKY, true);
             gA.blackKingThreat(false);
-            if (!foundYellowSquares() && gA.blackThreat && !canRemoveThreat(color)) {
+            ok = !foundYellowSquares();
+            if (ok && gA.blackThreat && !canRemoveThreat(color)) {
                 c = 'w';
                 gA.finishGame(c);
+            }
+            else{
+                if(ok && !gA.blackThreat){
+                    if(stalemate('b')){
+//                        Toast.makeText(gA, "blackkkkkkkkkk", Toast.LENGTH_SHORT).show();
+                        gA.finishGame(c);
+                    }
+                }
             }
         }
         hideAllYellows();
@@ -899,5 +919,67 @@ public class GameManager {
                 this.board[0][6].getPiece().setDead(false);
             }
         }
+    }
+
+    public int pointCalculation(Piece piece){
+        int points = 0;
+        if(piece != null){
+            if(piece.toString().matches("wp|bp")){
+                points = 1;
+            }
+            else {
+                if (piece.toString().matches("wn|bn|wb|bb")) {
+                    points = 3;
+                }
+                else{
+                    if(piece.toString().matches("wr|br")){
+                        points = 5;
+                    }
+                    else{
+                        points = 9;
+                    }
+                }
+            }
+        }
+        return points;
+    }
+
+    public boolean stalemate(char color){
+        int check = 0;
+        if(color == 'w') {
+            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+                if (!isOK(gA.whiteKX + 1, y) || (isOK(gA.whiteKX + 1, y) && isOcc(gA.whiteKX + 1, y))) {
+                    check++;
+                }
+            }
+            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+                if (!isOK(gA.whiteKX, y) || (isOK(gA.whiteKX, y) && isOcc(gA.whiteKX, y)) && y != gA.whiteKY) {
+                    check++;
+                }
+            }
+            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
+                if (!isOK(gA.whiteKX - 1, y) || (isOK(gA.whiteKX - 1, y) && isOcc(gA.whiteKX - 1, y))) {
+                    check++;
+                }
+            }
+        }
+        else {
+            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+                if (!isOK(gA.blackKX + 1, y) || (isOK(gA.blackKX + 1, y) && isOcc(gA.blackKX + 1, y))) {
+                    check++;
+                }
+            }
+            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+                if (!isOK(gA.blackKX, y) || (isOK(gA.blackKX, y) && isOcc(gA.blackKX, y)) && y != gA.blackKY) {
+                    check++;
+                }
+            }
+            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
+                if (!isOK(gA.blackKX - 1, y) || (isOK(gA.blackKX - 1, y) && isOcc(gA.blackKX - 1, y))) {
+                    check++;
+                }
+            }
+        }
+        return check != 8;
     }
 }

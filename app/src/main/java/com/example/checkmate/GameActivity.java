@@ -3,13 +3,17 @@ package com.example.checkmate;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -268,6 +272,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if((isWhiteTurn && whiteThreat) || (!isWhiteTurn && blackThreat)){
                 gM.updateSquare(i, j, occ, piece, false);
                 gM.updateSquare(x, y, true, piece2, false);
+                Vibrator vi = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vi.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                }
+                else {
+                    vi.vibrate(100);
+                }
             }
             else{
                 isWhiteTurn = !isWhiteTurn;

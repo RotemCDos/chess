@@ -57,10 +57,6 @@ public class GameManager {
         return board[i][j].isOcc();
     }
 
-    public void setOcc(int i, int j, boolean ok) {
-        board[i][j].setOcc(ok);
-    }
-
     public void setPiece(int i, int j, Piece piece) {
         board[i][j].setPiece(piece);
     }
@@ -93,18 +89,6 @@ public class GameManager {
         return getPiece(i, j).toString();
     }
 
-    public boolean isWhiteKing(int i, int j) {
-        return (this.board[i][j].getPiece().toString().equals("wk"));
-    }
-
-    public boolean isBlackKing(int i, int j) {
-        return (this.board[i][j].getPiece().toString().equals("bk"));
-    }
-
-    public boolean isRook(int i, int j) {
-        return (this.board[i][j].getPiece().toString().equals("wr") || this.board[i][j].getPiece().toString().equals("br"));
-    }
-
     //Update a square
 
     public void updateSquare(int x, int y, boolean occ, Piece piece, boolean ok) {
@@ -119,7 +103,7 @@ public class GameManager {
         return false;
     }
 
-    //Hiding highlited squares
+    //Hiding highlighted squares
 
     public void hideAllYellows() {
         for (int i = 0; i < 8; i++)
@@ -146,9 +130,6 @@ public class GameManager {
             if (getString(i, j).equals("wp")) {
                 pawnAttacks(i, j, ok);
             }
-//            if (getString(i, j).equals("wk")) {
-//                showKingMoves(i, j, ok);
-//            }
         }
         else{
             if (getString(i, j).equals("wp")) {
@@ -174,9 +155,6 @@ public class GameManager {
             if (getString(i, j).equals("bp")) {
                 pawnAttacks(i, j, ok);
             }
-//            if (getString(i, j).equals("bk")) {
-//                showKingMoves(i, j, ok);
-//            }
         }
         else{
             if (getString(i, j).equals("bp")) {
@@ -761,7 +739,7 @@ public class GameManager {
                 }
             }
         }
-        hideAllYellows();
+//        hideAllYellows();
         return yellowExist;
     }
 
@@ -776,6 +754,13 @@ public class GameManager {
             if (ok && gA.whiteThreat && !canRemoveThreat(color)) {
                 c = 'b';
                 gA.finishGame(c);
+            }
+            else{
+                if(ok && !gA.whiteThreat) {
+                    if (stalemate('w')) {
+                        gA.finishGame(c);
+                    }
+                }
             }
 //            else{
 //                if(ok && !gA.whiteThreat){
@@ -794,6 +779,13 @@ public class GameManager {
             if (ok && gA.blackThreat && !canRemoveThreat(color)) {
                 c = 'w';
                 gA.finishGame(c);
+            }
+            else{
+                if(ok && !gA.blackThreat) {
+                    if (stalemate('b')) {
+                        gA.finishGame(c);
+                    }
+                }
             }
 //            else{
 //                if(ok && !gA.blackThreat){
@@ -944,42 +936,95 @@ public class GameManager {
         return points;
     }
 
-//    public boolean stalemate(char color){
-//        int check = 0;
-//        if(color == 'w') {
-////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-////                if (!isOK(gA.whiteKX + 1, y) || (isOK(gA.whiteKX + 1, y) && isOcc(gA.whiteKX + 1, y))) {
-////                    check++;
-////                }
-////            }
-////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-////                if (!isOK(gA.whiteKX, y) || (isOK(gA.whiteKX, y) && isOcc(gA.whiteKX, y)) && y != gA.whiteKY) {
-////                    check++;
-////                }
-////            }
-////            for (int y = gA.whiteKY - 1; y < gA.whiteKY + 2; y++) {
-////                if (!isOK(gA.whiteKX - 1, y) || (isOK(gA.whiteKX - 1, y) && isOcc(gA.whiteKX - 1, y))) {
-////                    check++;
-////                }
-////            }
-//        }
-//        else {
-////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-////                if (!isOK(gA.blackKX + 1, y) || (isOK(gA.blackKX + 1, y) && isOcc(gA.blackKX + 1, y))) {
-////                    check++;
-////                }
-////            }
-////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-////                if (!isOK(gA.blackKX, y) || (isOK(gA.blackKX, y) && isOcc(gA.blackKX, y)) && y != gA.blackKY) {
-////                    check++;
-////                }
-////            }
-////            for (int y = gA.blackKY - 1; y < gA.blackKY + 2; y++) {
-////                if (!isOK(gA.blackKX - 1, y) || (isOK(gA.blackKX - 1, y) && isOcc(gA.blackKX - 1, y))) {
-////                    check++;
-////                }
-////            }
-//        }
-//        return check != 8;
-//    }
+    public boolean stalemate(char color){
+        boolean ok = true;
+        Piece tempPiece;
+        if(color == 'w'){
+            for (int p = 0; p < 8; p++) {
+                for (int k = 0; k < 8; k++) {
+                    if(isOcc(p, k) && getPiece(p, k).color == color && !getPiece(p, k).toString().equals("wk")){
+                        showWhitePiecesMoves(p, k, true, true);
+                        if(foundYellowSquares()) {
+                            tempPiece = getPiece(p, k);
+                            updateSquare(p, k, false, null, false);
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (this.board[t][s].isYellow() && !this.board[t][s].isOcc()) {
+                                        this.board[t][s].setOcc(true);
+                                        this.board[t][s].setYellow(false);
+                                        this.board[t][s].setPiece(new EmptyPiece());
+                                    }
+                                }
+                            }
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (isOcc(t, s) && getPiece(t, s).color != color && !getPiece(t, s).toString().equals("bk") && !isYellow(t, s)) {
+                                        showBlackPiecesMoves(t, s, true, true);
+                                    }
+                                }
+                            }
+                            if (!isYellow(gA.whiteKX, gA.whiteKY)) {
+                                Log.d("The piece is: ", tempPiece.toString() + " at " + p + " " + k);
+                                ok = false;
+                            }
+                            hideAllYellows();
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (this.board[t][s].isOcc() && this.board[t][s].getPiece().toString().equals("EmptyPiece")) {
+                                        this.board[t][s].setOcc(false);
+                                        this.board[t][s].setPiece(null);
+                                    }
+                                }
+                            }
+                            updateSquare(p, k, true, tempPiece, false);
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for (int p = 0; p < 8; p++) {
+                for (int k = 0; k < 8; k++) {
+                    if(isOcc(p, k) && getPiece(p, k).color == color && !getPiece(p, k).toString().equals("bk")){
+                        showBlackPiecesMoves(p, k, true, true);
+                        if(foundYellowSquares()) {
+                            tempPiece = getPiece(p, k);
+                            updateSquare(p, k, false, null, false);
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (this.board[t][s].isYellow() && !this.board[t][s].isOcc()) {
+                                        this.board[t][s].setOcc(true);
+                                        this.board[t][s].setYellow(false);
+                                        this.board[t][s].setPiece(new EmptyPiece());
+                                    }
+                                }
+                            }
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (isOcc(t, s) && getPiece(t, s).color != color && !getPiece(t, s).toString().equals("wk") && !isYellow(t, s)) {
+                                        showWhitePiecesMoves(t, s, true, true);
+                                    }
+                                }
+                            }
+                            if (!isYellow(gA.blackKX, gA.blackKY)) {
+                                Log.d("The piece is: ", tempPiece.toString() + " at " + p + " " + k);
+                                ok = false;
+                            }
+                            hideAllYellows();
+                            for (int t = 0; t < 8; t++) {
+                                for (int s = 0; s < 8; s++) {
+                                    if (this.board[t][s].isOcc() && this.board[t][s].getPiece().toString().equals("EmptyPiece")) {
+                                        this.board[t][s].setOcc(false);
+                                        this.board[t][s].setPiece(null);
+                                    }
+                                }
+                            }
+                            updateSquare(p, k, true, tempPiece, false);
+                        }
+                    }
+                }
+            }
+        }
+        return ok;
+    }
 }

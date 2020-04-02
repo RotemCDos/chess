@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 public class splash extends AppCompatActivity {
 
+    public static DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

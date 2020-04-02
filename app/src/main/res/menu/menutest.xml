@@ -8,6 +8,9 @@
         android:id="@+id/Item2"
         android:title="Music" />
     <item
+        android:id="@+id/call"
+        android:title="Phone"/>
+    <item
         android:id="@+id/exit"
         android:title="Exit" />
 

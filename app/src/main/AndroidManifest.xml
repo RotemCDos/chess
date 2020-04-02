@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         <activity android:name=".enterinfo"></activity>
-        <activity android:name=".leaderboards" />
+        <activity
+            android:name=".leaderboards"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".rules" />
         <activity
             android:name=".GameActivity"

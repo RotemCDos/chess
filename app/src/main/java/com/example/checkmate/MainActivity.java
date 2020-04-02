@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -91,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.Test:
                 startActivity(new Intent(MainActivity.this, leaderboards.class));
+                break;
+
+            case R.id.call:
+                intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "));
+                startActivity(intent);
                 break;
         }
         return true;

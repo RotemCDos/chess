@@ -10,7 +10,8 @@
         android:label="Chess"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-        <activity android:name=".enterinfo"></activity>
+        <activity android:name=".gallery"></activity>
+        <activity android:name=".enterinfo" />
         <activity
             android:name=".leaderboards"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -26,6 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".MyService" />
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@ package com.example.checkmate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,12 +25,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnExt;
     private Button btnLdb;
     private Button btnRules;
+    private Button btnGallery;
 
 
     private androidx.constraintlayout.widget.ConstraintLayout ly;
     boolean ok;
 
-    static MediaPlayer music;
+//    static MediaPlayer music;
 
 
     @Override
@@ -48,12 +51,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRules = (Button) findViewById(R.id.btnRules);
         btnRules.setOnClickListener(this);
 
-        music = MediaPlayer.create(getApplicationContext(), R.raw.music);
-        music.start();
-        music.setLooping(true);
+        btnGallery = (Button) findViewById(R.id.btnGallery);
+        btnGallery.setOnClickListener(this);
+
+//        music = MediaPlayer.create(getApplicationContext(), R.raw.music);
+//        music.start();
+//        music.setLooping(true);
+
+        startService(new Intent(this, MyService.class));
 
         ok = true;
 
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -79,15 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             case R.id.Item2:
-                if(music.isPlaying())
-                {
-                    music.stop();
+                if (isMyServiceRunning(MyService.class)) {
+                    stopService(new Intent(this, MyService.class));
                     break;
                 }
 
-                music = MediaPlayer.create(MainActivity.this, R.raw.music);
-                music.start();
-                music.setLooping(true);
+                startService(new Intent(this, MyService.class));
                 break;
 
             case R.id.Test:
@@ -105,27 +120,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Intent i;
-        if (v.getId() == R.id.btnExt)
-        {
+        if (v.getId() == R.id.btnExt) {
+            stopService(new Intent(this, MyService.class));
             finish();
             startActivity(new Intent(this, splash.class));
             moveTaskToBack(true);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
         }
-        else
-        if(v.getId()==R.id.btnPlay){
-            i= new Intent(this, enterinfo.class);
-            startActivity(i);
-        }
-        else
-            if (v.getId() == R.id.btnRules){
-                i = new Intent(this, rules.class);
+        else {
+            if (v.getId() == R.id.btnPlay) {
+                i = new Intent(this, enterinfo.class);
                 startActivity(i);
             }
             else {
-                i = new Intent(this, leaderboards.class);
-                startActivity(i);
+                if (v.getId() == R.id.btnRules) {
+                    i = new Intent(this, rules.class);
+                    startActivity(i);
+                }
+                else{
+                    if (v.getId() == R.id.btnLdb) {
+                        i = new Intent(this, leaderboards.class);
+                        startActivity(i);
+                    }
+                    else {
+                        i = new Intent(this, gallery.class);
+                        startActivity(i);
+                    }
+                }
             }
+        }
     }
 }

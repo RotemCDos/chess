@@ -321,7 +321,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent;
-                            MainActivity.music.pause();
                             intent = new Intent(GameActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -347,7 +346,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent;
-                                MainActivity.music.pause();
                                 intent = new Intent(GameActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -372,7 +370,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent;
-                                MainActivity.music.pause();
                                 intent = new Intent(GameActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -615,7 +612,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent;
         switch (v.getId()) {
             case R.id.btnBackg:
-                MainActivity.music.pause();
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;

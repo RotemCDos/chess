@@ -1,150 +1,42 @@
 package com.example.checkmate;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Adapter for a customized Listview
- */
-public class ScoreAdapter extends BaseAdapter implements ListAdapter {
+public class ScoreAdapter extends ArrayAdapter<Player> {
+    Context context;
+    List<Player> objects;
 
-    private Activity activity;
-    private ArrayList<Player> players;
-    private static LayoutInflater inflater;
-    private DatabaseHelper dbHelper;
-    public Resources res;
-    Player tempPlayer;
-    int i;
-
-    /*************  CustomAdapter Constructor *****************/
-    public ScoreAdapter(Activity a, Resources resLocal) {
-        activity = a;
-        dbHelper = splash.databaseHelper;
-        this.players = dbHelper.getAllPlayers();
-        res = resLocal;
-
-        /***********  Layout inflator to call external xml layout () ***********/
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+    public ScoreAdapter(Context context, int resource, int textViewResourceId, List<Player> objects) {
+        super(context, resource, textViewResourceId, objects);
+        this.context = context;
+        this.objects = objects;
     }
 
-    /**
-     * @return size of Passed Arraylist Size
-     */
-    public int getCount() {
-        return players.size();
-    }
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.customrow, parent, false);
 
-    /**
-     * @param position
-     * @return player in the passed position
-     */
-    public Object getItem(int position) {
-        return this.players.get(position);
-    }
+        TextView tvName = (TextView) view.findViewById(R.id.playerName);
+        TextView tvScore = (TextView) view.findViewById(R.id.score);
+        TextView tvColor = (TextView) view.findViewById(R.id.color);
 
-    /**
-     * @param position
-     * @return id of item in the passed position
-     */
-    public long getItemId(int position) {
-        return position;
-    }
+        Player temp = objects.get(position);
 
-    /**
-     * creates  a holder Class to contain inflated xml file elements
-     */
-    public static class ViewHolder {
+        tvScore.setText(String.valueOf(temp.getScore()));
+        tvName.setText(temp.getName());
+        tvColor.setText(temp.getColor());
 
-        public TextView tvName;
-        public TextView tvPoints;
-        public ImageView ibDelete;
+        return view;
 
     }
-
-    /**
-     * @return view of each row
-     */
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View vi = convertView;
-        final ViewHolder holder;
-
-        if (convertView == null) {
-
-            vi = inflater.inflate(R.layout.customrow, null);
-
-            /****** View Holder Object to contain ListView_row.xml file elements ******/
-
-            holder = new ViewHolder();
-            holder.tvName = (TextView) vi.findViewById(R.id.playerName);
-            holder.tvPoints = (TextView) vi.findViewById(R.id.score);
-            holder.ibDelete = (ImageView) vi.findViewById(R.id.btnDelete);
-
-            /************  Set holder with LayoutInflater ************/
-            vi.setTag(holder);
-        } else
-            holder = (ViewHolder) vi.getTag();
-
-        if (players.size() <= 0) {
-            holder.tvName.setText("No Data");
-        } else {
-            tempPlayer = players.get(position);
-
-            /************  Set Player values in Holder elements ***********/
-            holder.tvName.setText(tempPlayer.getName());
-            String points = "" + tempPlayer.getScore();
-            holder.tvPoints.setText(points);
-
-
-            holder.ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder
-                            .setIcon(R.drawable.deleteicon)
-                            .setTitle("Delete Line")
-                            .setMessage("Are you sure you Remove this Line ?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                    dbHelper.remove(players.get(position).getName());
-                                    players.remove(position);
-                                    notifyDataSetChanged();
-
-
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-
-                }
-
-
-
-            });
-
-        }
-        return vi;
-    }
-
 
 }

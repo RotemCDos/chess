@@ -44,6 +44,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton btnRes;
     private ImageButton[][] arr;
     private ImageButton[] wPieceR, bPieceR;
+    private appPreference preference;
+    Player player = new Player("", 0, 'w');
     int[] wPieceArr = {R.drawable.pawnw , R.drawable.rookw, R.drawable.knightw, R.drawable.bishopw, R.drawable.queenw, R.drawable.kingw};
     int[] bPieceArr = {R.drawable.pawnb , R.drawable.rookb, R.drawable.knightb, R.drawable.bishopb, R.drawable.queenb, R.drawable.kingb};
     int[] squareseArr = {R.drawable.brownl , R.drawable.brownd, R.drawable.yellowsquare};
@@ -92,6 +94,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         arr = new ImageButton[8][8];
         String str = "";
+
+        preference = new appPreference(getApplicationContext());
 
         for (i = 0; i < arr.length; i++) {
             for (j = 0; j < arr.length; j++) {
@@ -175,6 +179,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         restartGame();
+    }
+
+    public void addPlayerLB(char color) //adds a player to the leaderBoard
+    {
+        if(color == 'w')
+        {
+            player.setName(name1);
+            player.setScore(whitePoints);
+        }
+        else{
+            player.setName(name2);
+            player.setScore(blackPoints);
+        }
+        int currScore = this.player.getScore();
+        String currName = this.player.getName();
+        preference.update(currName,currScore, color);
     }
 
     public void restartGame() { // Restarts the game
@@ -307,6 +327,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
     }
 
+    public void addBothLDB(char winColor){
+        addPlayerLB('w');
+        addPlayerLB('b');
+    }
+
     public void finishGame(char c){ // Stops the game
         setBoardClickable(false);
         setWhiteReplace(false);
@@ -321,6 +346,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent;
+                            addBothLDB('b');
                             intent = new Intent(GameActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -328,6 +354,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            addBothLDB('b');
                             restartGame();
                         }
                     })
@@ -346,6 +373,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent;
+                                addBothLDB('w');
                                 intent = new Intent(GameActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -354,6 +382,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                addBothLDB('w');
                                 restartGame();
                             }
                         })
@@ -370,6 +399,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent;
+                                addBothLDB(' ');
                                 intent = new Intent(GameActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -378,6 +408,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                addBothLDB(' ');
                                 restartGame();
                             }
                         })

@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnRules;
     private Button btnGallery;
 
+    public static final String COUNT = "COUNT";
+    public static final String NAME = "NAME";
+    public static final String COLOR = "COLOR";
+    public static final String SCORE = "SCORE";
+
 
     private androidx.constraintlayout.widget.ConstraintLayout ly;
     boolean ok;
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        music.start();
 //        music.setLooping(true);
 
-        startService(new Intent(this, MyService.class));
+//        startService(new Intent(this, MyService.class));
 
         ok = true;
 

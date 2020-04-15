@@ -6,7 +6,7 @@ public class Square {
 	private int x,y;
 	private Piece piece;
 	private boolean occ, isYellow;
-	
+
 	public Square(int x, int y, boolean occ, Piece piece, boolean yellow)
 	{
 		this.x = x;

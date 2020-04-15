@@ -21,19 +21,19 @@ public abstract class Piece {
 	public char getColor() {
 		return this.color;
 	}
-	
+
 	public void setColor(char color) {
 		this.color = color;
 	}
-	
+
 	public boolean isDead() {
 		return dead;
 	}
-	
+
 	public void setDead(boolean dead) {
 		this.dead = dead;
 	}
-	
+
 	public boolean isMoved() {
 		return moved;
 	}

@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String NAME = "NAME";
     public static final String COLOR = "COLOR";
     public static final String SCORE = "SCORE";
+    public static final String NAME2 = "NAME2";
+    public static final String COLOR2 = "COLOR2";
+    public static final String SCORE2 = "SCORE2";
 
 
     private androidx.constraintlayout.widget.ConstraintLayout ly;

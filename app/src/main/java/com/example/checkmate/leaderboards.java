@@ -26,6 +26,9 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
     public static final String FIRST_COLUMN="Score";
     public static final String SECOND_COLUMN="Player Name";
     public static final String THIRD_COLUMN="Player Color";
+    public static final String FOURTH_COLUMN="Score2";
+    public static final String FIFTH_COLUMN="Player Name2";
+    public static final String SIXTH_COLUMN="Player Color2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +84,13 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
         //adds all preference to array list
         for(count = 0 ; count < stop ; count++) {
             temp = new HashMap<String, String>();
-            temp.put(FIRST_COLUMN, preference.getScore(count) + "");
-            temp.put(SECOND_COLUMN, preference.getPlayerName(count));
-            temp.put(THIRD_COLUMN, preference.getPlayerColor(count));
+            temp.put(FIRST_COLUMN, preference.getScore(count, 'w') + "");
+            temp.put(SECOND_COLUMN, preference.getPlayerName(count, 'w'));
+            temp.put(THIRD_COLUMN, preference.getPlayerColor(count, 'w'));
+
+            temp.put(FOURTH_COLUMN, preference.getScore(count, 'b') + "");
+            temp.put(FIFTH_COLUMN, preference.getPlayerName(count, 'b'));
+            temp.put(SIXTH_COLUMN, preference.getPlayerColor(count, 'b'));
             statisticList.add(0, temp);
         }
 //        this.score = preference.getScore(0);

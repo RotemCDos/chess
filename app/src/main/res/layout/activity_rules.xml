@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:text="\n Main Goal Of The Game: \n
 The ultimate aim in the chess game is delivering \n a checkmate – trapping your opponent´s king.
-The term checkmate is an alteration of the Persian phrase “Shah Mat”, meaning literally, “the King is ambushed”, and not “the King is dead”, that is a common misconception. \n
+The term checkmate is an alteration of the Persian phrase “Shah Mat”, meaning literally, “the King is ambushed”, and not “the King is dead”, that is a common misconception. In this state, the player that threatened the opponent's king will receive 200 points and will win the game. \n
 If the game ends and both players have under 200 points, the result is a draw. \n"
                 android:textColor="#00FFAF" />
 

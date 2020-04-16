@@ -61,6 +61,10 @@ public class AdapterListView extends BaseAdapter
             viewHolder.col1 = (TextView) convertView.findViewById(R.id.score);
             viewHolder.col3 = (TextView) convertView.findViewById(R.id.color);
 
+            viewHolder.col5 = (TextView) convertView.findViewById(R.id.playerName2);
+            viewHolder.col4 = (TextView) convertView.findViewById(R.id.score2);
+            viewHolder.col6 = (TextView) convertView.findViewById(R.id.color2);
+
             convertView.setTag(viewHolder);
         } else
             viewHolder = (ViewHolder) convertView.getTag();
@@ -109,6 +113,50 @@ public class AdapterListView extends BaseAdapter
             viewHolder.col3.setTextSize(20);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        //Design the score list
+        viewHolder.col4.setText(map.get(leaderboards.FOURTH_COLUMN));
+
+        viewHolder.col4.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        //set the text view size
+        if (i == 0) {
+            viewHolder.col4.setTextSize(22);
+            viewHolder.col4.setTextColor(Color.RED);
+        }
+        else {
+            viewHolder.col4.setTextSize(20);
+
+        }
+
+        //Design the score list
+        viewHolder.col5.setText(map.get(leaderboards.FIFTH_COLUMN));
+
+        viewHolder.col5.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        //set the text view size
+        if(i == 0) {
+            viewHolder.col5.setTextSize(22);
+            viewHolder.col5.setTextColor(Color.RED);
+        }
+        else {
+            viewHolder.col5.setTextSize(20);
+        }
+
+        viewHolder.col6.setText(map.get(leaderboards.SIXTH_COLUMN));
+
+        viewHolder.col6.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        //set the text view size
+        if(i == 0) {
+            viewHolder.col6.setTextSize(22);
+            viewHolder.col6.setTextColor(Color.RED);
+        }
+        else {
+            viewHolder.col6.setTextSize(20);
+        }
+
         return convertView;
     }
 
@@ -118,6 +166,9 @@ public class AdapterListView extends BaseAdapter
         TextView col1; // text view column in list view
         TextView col2; // text view column in list view
         TextView col3;
+        TextView col4;
+        TextView col5;
+        TextView col6;
     }
 
 

@@ -25,7 +25,7 @@
         android:id="@+id/btnLdb"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:text="Leaderboard"
+        android:text="Recent Games"
         android:background="@android:color/holo_blue_dark"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"

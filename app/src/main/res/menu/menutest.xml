@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/Test"
-        android:title="Statistics" />
+        android:title="Recent Games" />
     <item
         android:id="@+id/Item2"
         android:title="Music" />

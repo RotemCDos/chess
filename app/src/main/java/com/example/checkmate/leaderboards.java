@@ -44,7 +44,6 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
         btnBack = (ImageButton) findViewById(R.id.btnBackLdb);
         btnBack.setOnClickListener(this);
 
-        AddSortArrayList();//adds players to the list in the right order
 
         // first row
         HashMap<String,String> temp = new HashMap<String, String>();
@@ -52,6 +51,8 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
         temp.put(SECOND_COLUMN,"Name:");
         temp.put(THIRD_COLUMN,"Color:");
         statisticList.add(0,temp);
+
+        AddSortArrayList();//adds players to the list in the right order
     }
 
     @Override
@@ -91,7 +92,7 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
             temp.put(FOURTH_COLUMN, preference.getScore(count, 'b') + "");
             temp.put(FIFTH_COLUMN, preference.getPlayerName(count, 'b'));
             temp.put(SIXTH_COLUMN, preference.getPlayerColor(count, 'b'));
-            statisticList.add(0, temp);
+            statisticList.add(1, temp);
         }
 //        this.score = preference.getScore(0);
         keepFirstTen();

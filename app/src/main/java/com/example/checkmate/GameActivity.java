@@ -302,7 +302,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 piece2.setMoved(true);
 
                 if(gM.getPiece(i,j).isDead()){
-                    gM.doCastling(gM.getPiece(i,j).color);
+                    gM.doCastling(gM.getPiece(i,j).color, i, j);
                 }
 
                 savePiece(i, j);

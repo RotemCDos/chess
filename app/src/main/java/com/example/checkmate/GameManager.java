@@ -876,9 +876,9 @@ public class GameManager {
         }
     }
 
-    public void doCastling(char color){
+    public void doCastling(char color, int i, int j){
         if(color == 'w'){
-            if (this.board[7][0].getPiece().isDead()){
+            if (this.board[7][0].isOcc() && this.board[7][2].isOcc() && this.board[7][0].getPiece().isDead()){
                 updateSquare(7, 3, true, this.board[7][0].getPiece() , false);
                 updateSquare(7, 0, false, null, false);
                 this.board[7][3].getPiece().setMoved(true);
@@ -886,16 +886,17 @@ public class GameManager {
                 this.board[7][2].getPiece().setDead(false);
             }
             else
-                if (this.board[7][7].getPiece().isDead()) {
+                if (this.board[7][7].isOcc() && this.board[7][6].isOcc() && this.board[7][7].getPiece().isDead()) {
                     updateSquare(7, 5, true, this.board[7][7].getPiece(), false);
                     updateSquare(7, 7, false, null, false);
                     this.board[7][5].getPiece().setMoved(true);
                     this.board[7][5].getPiece().setDead(false);
                     this.board[7][6].getPiece().setDead(false);
                 }
+                this.board[i][j].getPiece().setDead(false);
         }
         else{
-            if (this.board[0][0].getPiece().isDead()){
+            if (this.board[0][0].isOcc() && this.board[0][2].isOcc() && this.board[0][0].getPiece().isDead()){
                 updateSquare(0, 3, true, this.board[0][0].getPiece() , false);
                 updateSquare(0, 0, false, null, false);
                 this.board[0][3].getPiece().setMoved(true);
@@ -903,13 +904,14 @@ public class GameManager {
                 this.board[0][2].getPiece().setDead(false);
             }
             else
-            if (this.board[0][7].getPiece().isDead()){
+            if (this.board[0][7].isOcc() && this.board[0][6].isOcc() && this.board[0][7].getPiece().isDead()){
                 updateSquare(0, 5, true, this.board[0][7].getPiece() , false);
                 updateSquare(0, 7, false, null, false);
                 this.board[0][5].getPiece().setMoved(true);
                 this.board[0][5].getPiece().setDead(false);
                 this.board[0][6].getPiece().setDead(false);
             }
+            this.board[i][j].getPiece().setDead(false);
         }
     }
 

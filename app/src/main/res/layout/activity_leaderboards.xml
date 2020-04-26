@@ -34,7 +34,7 @@
             android:layout_weight="0"
             android:fontFamily="casual"
             android:gravity="center_horizontal"
-            android:text=" Game Statistics"
+            android:text=" Recent Games"
             android:textColor="#00ffff"
             android:textSize="30sp"
             android:textStyle="normal|bold" />

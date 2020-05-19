@@ -8,56 +8,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.view.ViewGroup;
-
-import com.example.checkmate.pieces.Pawn;
 import com.example.checkmate.pieces.Piece;
-import com.podcopic.animationlib.library.AnimationType;
-import com.podcopic.animationlib.library.StartSmartAnimation;
-
-import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     String name1 = "*****", name2 = "$$$$$$";
 
-    private TextView tvPlayer1, tvPlayer2;
+    private TextView tvPlayer1, tvPlayer2; //Names of player 1 and 2
     private GameManager gM;
-    private ImageButton btnBack;
-    private ImageButton btnRes;
-    private ImageButton[][] arr;
-    private ImageButton[] wPieceR, bPieceR;
+    private ImageButton btnBack; //Back button
+    private ImageButton btnRes; //Restart button
+    private ImageButton[][] arr; //Board array
+    private ImageButton[] wPieceR, bPieceR; //Arrays that show up when a player gets to the end of the board with a pawn, allowing him to change the pawn
     private appPreference preference;
     int[] wPieceArr = {R.drawable.pawnw , R.drawable.rookw, R.drawable.knightw, R.drawable.bishopw, R.drawable.queenw, R.drawable.kingw};
     int[] bPieceArr = {R.drawable.pawnb , R.drawable.rookb, R.drawable.knightb, R.drawable.bishopb, R.drawable.queenb, R.drawable.kingb};
     int[] squareseArr = {R.drawable.brownl , R.drawable.brownd, R.drawable.yellowsquare};
 
-    public boolean yellowExist = false;
+    public boolean yellowExist = false; //If there are yellow squares on the board
     public boolean isWhiteTurn = true;
-    public boolean whiteThreat, blackThreat;
+    public boolean whiteThreat, blackThreat; //Checks if the black or white king is in threat
     boolean ok, isGameOver;
     int i, j, resId , x , y;
     Piece piece = null, piece2 = null;
     String sb = "";
-    int whiteKX = 7, whiteKY = 4, blackKX = 0, blackKY = 4;
-    int whitePoints = 0, blackPoints = 0;
+    int whiteKX = 7, whiteKY = 4, blackKX = 0, blackKY = 4; //White and black king x,y
+    int whitePoints = 0, blackPoints = 0; //White and black points
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -547,7 +530,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if(i == 3)
                     sb = "b";
                 gM.setPiece(x, y, gM.promotePawn(x, gM.getPiece(x,y).getColor(), sb));
-//                checkKing();
                 gM.victoryCheck('w');
             }
             if(v.getId() == bPieceR[i].getId()){
@@ -560,7 +542,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if(i == 3)
                     sb = "b";
                 gM.setPiece(x, y, gM.promotePawn(x, gM.getPiece(x,y).getColor(), sb));
-//                checkKing();
                 gM.victoryCheck('b');
             }
         }
@@ -590,8 +571,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             whiteKingThreat(true);
             gM.showKingMoves(i, j, true);
             whiteKingThreat(false);
-//            gM.victoryCheck('w');
-//            gM.castling();
         }
     }
 
@@ -615,7 +594,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             blackKingThreat(true);
             gM.showKingMoves(i, j, true);
             blackKingThreat(false);
-//            gM.victoryCheck('b');
         }
     }
 

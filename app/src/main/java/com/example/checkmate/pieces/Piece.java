@@ -1,9 +1,5 @@
 package com.example.checkmate.pieces;
 
-import com.example.checkmate.Square;
-
-import java.util.ArrayList;
-
 public abstract class Piece {
 	public char color;
 	private boolean dead = false;

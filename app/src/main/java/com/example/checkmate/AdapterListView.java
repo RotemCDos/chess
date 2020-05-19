@@ -8,18 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.RequiresApi;
-
-/**
- * Created by Lenovo on 25/03/2019.
- */
 
 public class AdapterListView extends BaseAdapter
 {
@@ -160,9 +153,7 @@ public class AdapterListView extends BaseAdapter
         return convertView;
     }
 
-
-    private class ViewHolder
-    {
+    private class ViewHolder {
         TextView col1; // text view column in list view
         TextView col2; // text view column in list view
         TextView col3;
@@ -170,6 +161,4 @@ public class AdapterListView extends BaseAdapter
         TextView col5;
         TextView col6;
     }
-
-
 }

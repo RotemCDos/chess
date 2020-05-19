@@ -1,7 +1,5 @@
 package com.example.checkmate.pieces;
 
-import com.example.checkmate.Square;
-
 public class Pawn extends Piece{
 
 	public Pawn(char color, boolean dead, boolean moved) {

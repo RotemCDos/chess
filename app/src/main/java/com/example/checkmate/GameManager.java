@@ -1,12 +1,7 @@
 package com.example.checkmate;
 
 import android.util.Log;
-import android.widget.Toast;
-
 import com.example.checkmate.pieces.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameManager {
 
@@ -97,12 +92,6 @@ public class GameManager {
         this.board[x][y].setYellow(ok);
     }
 
-    public boolean checkVictor(int i, int j) {
-        if (isOK(i, j) && this.board[i][j].isOcc())
-            return (this.board[i][j].getPiece().toString().equals("wk") || this.board[i][j].getPiece().toString().equals("bk"));
-        return false;
-    }
-
     //Hiding highlighted squares
 
     public void hideAllYellows() {
@@ -175,7 +164,7 @@ public class GameManager {
         }
     }
 
-    public void pawnAttacks(int i, int j, boolean ok) {
+    public void pawnAttacks(int i, int j, boolean ok) { //Shows where pawns can eat
         if (!board[i][j].getPiece().isMoved()) {
             if (board[i][j].getPiece().color == 'w') {
                 if (isOK(i - 1, j - 1)) {
@@ -599,7 +588,7 @@ public class GameManager {
         }
     }
 
-    public boolean canBlockThreat(Piece piece){
+    public boolean canBlockThreat(Piece piece){ //Checks if a piece can get in line of sight of a threatening piece
         boolean ok = false;
         if(piece.toString().matches("wr|wb|wq|bb|br|bq")) {
             if (piece.color == 'w') {
@@ -676,7 +665,7 @@ public class GameManager {
         return ok;
     }
 
-    public boolean canRemoveThreat(char color) {
+    public boolean canRemoveThreat(char color) { //Checks if a piece can eat a threatening piece
         boolean ok = false;
         int threat = 0;
         if (color == 'w') {
@@ -739,7 +728,6 @@ public class GameManager {
                 }
             }
         }
-//        hideAllYellows();
         return yellowExist;
     }
 
@@ -762,14 +750,6 @@ public class GameManager {
                     }
                 }
             }
-//            else{
-//                if(ok && !gA.whiteThreat){
-//                    if(stalemate('w')){
-////                        Toast.makeText(gA, "whitelelelelelelel", Toast.LENGTH_SHORT).show();
-//                        gA.finishGame(c);
-//                    }
-//                }
-//            }
         }
         else {
             gA.blackKingThreat(true);
@@ -787,14 +767,6 @@ public class GameManager {
                     }
                 }
             }
-//            else{
-//                if(ok && !gA.blackThreat){
-//                    if(stalemate('b')){
-//                        Toast.makeText(gA, "blackkkkkkkkkk", Toast.LENGTH_SHORT).show();
-//                        gA.finishGame(c);
-//                    }
-//                }
-//            }
         }
         hideAllYellows();
     }
@@ -820,7 +792,7 @@ public class GameManager {
         return new Pawn(color, false, true);
     }
 
-    public void castlingMarkings(char color) {
+    public void castlingMarkings(char color) { //Shows where a castling can be done
         boolean ok;
         if(color == 'w') {
             if(this.board[7][0].isOcc() && this.board[7][4].isOcc()) {
@@ -876,7 +848,7 @@ public class GameManager {
         }
     }
 
-    public void doCastling(char color, int i, int j){
+    public void doCastling(char color, int i, int j){ //Preforms castling
         if(color == 'w'){
             if (this.board[7][0].isOcc() && this.board[7][2].isOcc() && this.board[7][0].getPiece().isDead()){
                 updateSquare(7, 3, true, this.board[7][0].getPiece() , false);
@@ -915,7 +887,7 @@ public class GameManager {
         }
     }
 
-    public int pointCalculation(Piece piece){
+    public int pointCalculation(Piece piece){ //Calculating the points each player has
         int points = 0;
         if(piece != null){
             if(piece.toString().matches("wp|bp")){
@@ -938,7 +910,7 @@ public class GameManager {
         return points;
     }
 
-    public boolean stalemate(char color){
+    public boolean stalemate(char color){ // Checks if the game has come to a draw
         boolean ok = true;
         Piece tempPiece;
         if(color == 'w'){

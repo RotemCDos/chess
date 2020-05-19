@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,11 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 public class leaderboards extends AppCompatActivity implements View.OnClickListener,View.OnLongClickListener{
 
     private ArrayList<HashMap<String,String>> statisticList; //list score
-    private ListView lvStati; // the list view
+    private ListView lvStati; //list view
     private AdapterListView adapter;
     private appPreference preference;
     private int stop; // num of lines in share preference
-    private int score;
     ImageButton btnBack; //back button
 
     // list view finals
@@ -35,7 +33,6 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboards);
         lvStati = (ListView)findViewById(R.id.lvStati);
-//        getApplicationContext().getSharedPreferences("APP_SHARED_PREFS",0).edit().clear().commit();
         statisticList = new ArrayList<HashMap<String,String>>();
         preference = new appPreference(getApplicationContext());
 
@@ -94,7 +91,6 @@ public class leaderboards extends AppCompatActivity implements View.OnClickListe
             temp.put(SIXTH_COLUMN, preference.getPlayerColor(count, 'b'));
             statisticList.add(1, temp);
         }
-//        this.score = preference.getScore(0);
         keepFirstTen();
     }
 

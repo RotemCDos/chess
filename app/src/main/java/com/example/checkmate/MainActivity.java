@@ -5,19 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import com.podcopic.animationlib.library.AnimationType;
-import com.podcopic.animationlib.library.StartSmartAnimation;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,12 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String COLOR2 = "COLOR2";
     public static final String SCORE2 = "SCORE2";
 
-
-    private androidx.constraintlayout.widget.ConstraintLayout ly;
     boolean ok;
-
-//    static MediaPlayer music;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnGallery = (Button) findViewById(R.id.btnGallery);
         btnGallery.setOnClickListener(this);
-
-//        music = MediaPlayer.create(getApplicationContext(), R.raw.music);
-//        music.start();
-//        music.setLooping(true);
-
-//        startService(new Intent(this, MyService.class));
 
         ok = true;
 
@@ -97,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id) {
 
             case R.id.exit:
-//                Save();
                 startActivity(new Intent(this, splash.class));
                 moveTaskToBack(true);
                 android.os.Process.killProcess(android.os.Process.myPid());

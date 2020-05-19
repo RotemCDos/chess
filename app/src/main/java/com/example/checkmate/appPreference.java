@@ -4,14 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
-/**
- * Created by Lenovo on 03/25/2019.
- */
-
 public class appPreference {
-    private String playerName;
-    private int score;
     private static final String APP_SHARED_PREFS = appPreference.class.getSimpleName(); // Name of the file -.xml
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
